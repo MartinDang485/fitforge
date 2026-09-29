@@ -3,7 +3,7 @@ import { useState } from "react"
 
 
 async function PostRequest(exercise) {
-    const res = await fetch('/api/workoutsapi', {
+    const res = await fetch('/api/exerciseapi', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -18,32 +18,30 @@ async function PostRequest(exercise) {
     }
 
     const data = await res.json()
-    return { data }
+    return data 
 }
 
 export default function ExerciseForm() {
 
     //Use usestate
     const [title, setTitle] = useState("")
-    const [reps, setReps] = useState("")
-    const [sets, setSets] = useState("")
+    const [bodyPart, setBodyPart] = useState("")
     const [submittedE, setSubmittedE] = useState<{
         title: string
-        reps: string
-        sets: string
+        bodyPart: string
     } | null>(null)
 
     async function onSubmit(e) {
         e.preventDefault()
-        if(!title || !sets || !reps) {
+        if(!title || !bodyPart) {
             console.log("Please fill out all fields")
             return
         }
         
-        const exercise = { title, reps, sets}
+        const exercise = { title, bodyPart}
 
         try {
-            const { data } = await PostRequest(exercise)
+            const data  = await PostRequest(exercise)
             setSubmittedE(exercise)
         } catch (err) {
             console.log(err)
@@ -62,17 +60,13 @@ export default function ExerciseForm() {
             />
               
             
-            <label>Reps</label>
-            <input
-                value={reps}
-                onChange={(e) => setReps(e.target.value)}
+            <label>Body Part</label>
+            <textarea
+                placeholder="Body Part"
+                value={bodyPart}
+                onChange={(e) => setBodyPart(e.target.value)}
             />
 
-            <label>Sets</label>
-            <input
-                value={sets}
-                onChange={(e) => setSets(e.target.value)}
-            />
             <button type="submit">Submit</button>
             </form>
 
@@ -80,8 +74,7 @@ export default function ExerciseForm() {
                 <div>
                     <h2>Submitted Exercise</h2>
                     <p>Title {submittedE.title}</p>
-                    <p>Reps {submittedE.reps}</p>
-                    <p>Sets {submittedE.sets}</p>
+                    <p>Body Part:  {submittedE.bodyPart}</p>
                 </div>
             )}
         </div>

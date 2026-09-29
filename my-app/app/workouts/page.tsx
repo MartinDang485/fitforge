@@ -1,7 +1,9 @@
 import  ExerciseForm from "@/components/exerciseform"
+import ExerciseList from "@/components/exerciseList"
 
+//To be function to get workouts instead of exercises
 async function getWorkouts() {
-    const res = await fetch(`${process.env.NEXT_URL}/api/workoutsapi`, {
+    const res = await fetch(`${process.env.NEXT_URL}/api/exerciseapi`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -15,19 +17,20 @@ async function getWorkouts() {
         throw new Error(`Request failed, ${res.status}`)
     }
 
-    const { message } = await res.json();
-    return message;
+    const { data } = await res.json();
+    return data;
 }
 
 export default async function WorkoutsComponent() {
-    const message = await getWorkouts()
+    const data = await getWorkouts()
 
     return (
 
         <div>
-            <h2>Test from workouts route</h2>
-            <h1>{message}</h1>
-            <ExerciseForm></ExerciseForm>
+            <h2>All exercises</h2>
+            <h1>{data}</h1>
+            
+            <ExerciseList></ExerciseList>
         </div>
     )
 }
