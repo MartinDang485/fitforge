@@ -21,7 +21,7 @@ async function PostRequest(exercise) {
     return data 
 }
 
-export default function ExerciseForm() {
+export default function ExerciseForm({onCreated}: {onCreated: () => void}) {
 
     //Use usestate
     const [title, setTitle] = useState("")
@@ -43,10 +43,13 @@ export default function ExerciseForm() {
         try {
             const data  = await PostRequest(exercise)
             setSubmittedE(exercise)
+            onCreated()
+            setTitle("")
+            setBodyPart("")
+            
         } catch (err) {
             console.log(err)
         }
-        
     }
 
     return(

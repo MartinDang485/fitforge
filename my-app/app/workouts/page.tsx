@@ -1,6 +1,6 @@
 import  ExerciseForm from "@/components/exerciseform"
 import ExerciseList from "@/components/exerciseList"
-
+import ExercisePanel from "@/components/exercisePanel"
 //To be function to get workouts instead of exercises
 async function getWorkouts() {
     const res = await fetch(`${process.env.NEXT_URL}/api/exerciseapi`, {
@@ -29,8 +29,7 @@ export default async function WorkoutsComponent() {
         <div>
             <h2>All exercises</h2>
             <h1>{data}</h1>
-            
-            <ExerciseList></ExerciseList>
+            <ExercisePanel></ExercisePanel>
         </div>
     )
 }
