@@ -21,9 +21,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 export async function PUT(req: Request, { params }: {params: Promise<{ id: string}>}) {
     const supabase = await createClient()
     const { id } = await params
+    const { exercise } = await req.json()
     const { data, error} = await supabase
         .from("exercises")
-        .update()
+        .update({name: exercise.name, body_part: exercise.bodyPart})
         .eq("id", id)
         .select()
         .single()

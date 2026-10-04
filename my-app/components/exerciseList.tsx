@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { Checkbox } from "@/components/ui/checkbox"
+
 type Exercise = {
     id: string,
     name: string,
@@ -18,8 +20,8 @@ async function deleteExercise(id: string): Promise<void> {
     }
 }
 
-async function updateExercise(id: string, exercise): Promise<void> {
-    const res = await fetch(`api/exerciseapi/${id}`, {
+async function updateExercise(id: string, exercise: {name: string, body_part: string}): Promise<void> {
+    const res = await fetch(`/api/exerciseapi/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -34,8 +36,33 @@ async function updateExercise(id: string, exercise): Promise<void> {
     }
 }
 
-export default function ExerciseList({exercises, onDeleted}: {exercises: Exercise[], onDeleted: () => void}) {
+export default function ExerciseList({exercises, onDeleted, onUpdated, selecting, selectedIDs, onToggle}: 
+    {exercises: Exercise[], onDeleted: () => void, onUpdated: () => void, selecting: boolean, selectedIDs: string[], onToggle: (id: string) => void}) {
 
+    const [editID, seteditId] = useState<string | null>(null)
+    const [editTitle, setEditTitle] = useState("")
+    const [editBodyPart, setEditBodyPart] = useState("")
+
+    function cancelEdit() {
+        seteditId(null)
+    }
+
+    function startEdit(ex: Exercise) {
+        seteditId(ex.id)
+        setEditTitle(ex.name)
+        setEditBodyPart(ex.body_part)
+
+    }
+
+    async function handleSave(id: string) {
+        try {
+            await updateExercise(id, {name: editTitle, body_part: editBodyPart})
+            seteditId(null)
+            onUpdated()
+        } catch (err) {
+            console.log(err)
+        }
+    }
     async function handleDelete(id: string) {
         try {
             await deleteExercise(id)
@@ -49,9 +76,37 @@ export default function ExerciseList({exercises, onDeleted}: {exercises: Exercis
         <div>
             {exercises.map((ex) => (
                 <div key={ex.id}>
-                    <p>{ex.name} - { ex.body_part}</p>
-                    <button onClick={() => handleDelete(ex.id)}>Delete</button>
-                    <button>Edit</button>
+                    {selecting && (
+                        <div>
+                            <p>{ex.name}</p>
+                            <Checkbox
+                                checked={selectedIDs.includes(ex.id)}
+                                onCheckedChange={() => onToggle(ex.id)}
+                            />
+                        </div>
+                    )}
+
+
+                    {editID === ex.id ? (
+                        <>
+                            <input
+                                value={editTitle}
+                                onChange={(e) => setEditTitle(e.target.value)}
+                            />
+                            <input
+                                value={editBodyPart}
+                                onChange={(e) => setEditBodyPart(e.target.value)}
+                            />
+                            <button onClick={() => handleSave(ex.id)}>Save</button>
+                            <button onClick={() => cancelEdit()}>Cancel</button>
+                        </>
+                    ) : (
+                        <>
+                            <p>{ex.name} --- {ex.body_part}</p>
+                            <button onClick={() => handleDelete(ex.id)}>Delete</button>
+                            <button onClick={() => startEdit(ex)}>Edit</button>
+                        </>
+                    )}
                 </div>
             ))}
         </div>

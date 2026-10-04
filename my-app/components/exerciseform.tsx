@@ -1,6 +1,9 @@
 'use client'
 import { useState } from "react"
-
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 
 async function PostRequest(exercise) {
     const res = await fetch('/api/exerciseapi', {
@@ -46,41 +49,36 @@ export default function ExerciseForm({onCreated}: {onCreated: () => void}) {
             onCreated()
             setTitle("")
             setBodyPart("")
-            
+
         } catch (err) {
             console.log(err)
         }
     }
 
     return(
-        <div>
-        
+        <Card className="w-full max-w-md">
+            <CardHeader>
+                <CardTitle>New exercise</CardTitle>
+                <CardDescription>Add an exercise to your library</CardDescription>
+            </CardHeader>
+
             <form onSubmit={onSubmit}>
-            <label>title</label>
-            <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-              
-            
-            <label>Body Part</label>
-            <textarea
-                placeholder="Body Part"
-                value={bodyPart}
-                onChange={(e) => setBodyPart(e.target.value)}
-            />
-
-            <button type="submit">Submit</button>
+                <CardContent className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="title">Title</Label>
+                        <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="bodyPart">Body Part</Label>
+                        <Input id="bodypart" value={bodyPart} onChange={(e) => setBodyPart(e.target.value)}/>
+                    </div>
+                </CardContent>
+                <CardFooter className="mt-4">
+                    <Button type="submit">Add exercise</Button>
+                </CardFooter>
             </form>
-
-            {submittedE && (
-                <div>
-                    <h2>Submitted Exercise</h2>
-                    <p>Title {submittedE.title}</p>
-                    <p>Body Part:  {submittedE.bodyPart}</p>
-                </div>
-            )}
-        </div>
+        </Card>
+        
     )
 }
         
