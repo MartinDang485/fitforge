@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 
 type Exercise = {

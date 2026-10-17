@@ -7,7 +7,7 @@ import WorkoutList from "./workoutList"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 
 type Exercise = {
     id: number,
@@ -122,7 +122,10 @@ export default function ExercisePanel() {
     }
 
     useEffect(() => {
+        // Initial data load from the API; setState runs after the awaited fetch, not synchronously
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         refreshExercise()
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         refreshWorkout()
     }, [])
     return (
