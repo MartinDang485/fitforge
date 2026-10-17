@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} 
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
-async function PostRequest(exercise) {
+//Function to POST a workout
+async function PostRequest(exercise: { title: string, bodyPart: string}) {
     const res = await fetch('/api/exerciseapi', {
         method: "POST",
         headers: {
@@ -24,9 +25,10 @@ async function PostRequest(exercise) {
     return data 
 }
 
+//Gets onCreated function from exercisePanel.tsx, to trigger a refresh when posted
 export default function ExerciseForm({onCreated}: {onCreated: () => void}) {
 
-    //Use usestate
+    //Use usestate variables for POST body
     const [title, setTitle] = useState("")
     const [bodyPart, setBodyPart] = useState("")
     const [submittedE, setSubmittedE] = useState<{
@@ -34,7 +36,8 @@ export default function ExerciseForm({onCreated}: {onCreated: () => void}) {
         bodyPart: string
     } | null>(null)
 
-    async function onSubmit(e) {
+    //Handle submit, call POST function, clear useState variables, call onCreated = refresh function
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         if(!title || !bodyPart) {
             console.log("Please fill out all fields")
@@ -70,7 +73,7 @@ export default function ExerciseForm({onCreated}: {onCreated: () => void}) {
                     </div>
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="bodyPart">Body Part</Label>
-                        <Input id="bodypart" value={bodyPart} onChange={(e) => setBodyPart(e.target.value)}/>
+                        <Input id="bodyPart" value={bodyPart} onChange={(e) => setBodyPart(e.target.value)}/>
                     </div>
                 </CardContent>
                 <CardFooter className="mt-4">

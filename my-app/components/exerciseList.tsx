@@ -4,12 +4,12 @@ import { useEffect, useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 
 type Exercise = {
-    id: string,
+    id: number,
     name: string,
     body_part: string
 }
 
-async function deleteExercise(id: string): Promise<void> {
+async function deleteExercise(id: number): Promise<void> {
     const res = await fetch(`/api/exerciseapi/${id}`, {
         method: "DELETE",
     })
@@ -20,7 +20,7 @@ async function deleteExercise(id: string): Promise<void> {
     }
 }
 
-async function updateExercise(id: string, exercise: {name: string, body_part: string}): Promise<void> {
+async function updateExercise(id: number, exercise: {name: string, body_part: string}): Promise<void> {
     const res = await fetch(`/api/exerciseapi/${id}`, {
         method: "PUT",
         headers: {
@@ -37,9 +37,9 @@ async function updateExercise(id: string, exercise: {name: string, body_part: st
 }
 
 export default function ExerciseList({exercises, onDeleted, onUpdated, selecting, selectedIDs, onToggle}: 
-    {exercises: Exercise[], onDeleted: () => void, onUpdated: () => void, selecting: boolean, selectedIDs: string[], onToggle: (id: string) => void}) {
+    {exercises: Exercise[], onDeleted: () => void, onUpdated: () => void, selecting: boolean, selectedIDs: number[], onToggle: (id: number) => void}) {
 
-    const [editID, seteditId] = useState<string | null>(null)
+    const [editID, seteditId] = useState<number | null>(null)
     const [editTitle, setEditTitle] = useState("")
     const [editBodyPart, setEditBodyPart] = useState("")
 
@@ -54,7 +54,7 @@ export default function ExerciseList({exercises, onDeleted, onUpdated, selecting
 
     }
 
-    async function handleSave(id: string) {
+    async function handleSave(id: number) {
         try {
             await updateExercise(id, {name: editTitle, body_part: editBodyPart})
             seteditId(null)
@@ -63,7 +63,7 @@ export default function ExerciseList({exercises, onDeleted, onUpdated, selecting
             console.log(err)
         }
     }
-    async function handleDelete(id: string) {
+    async function handleDelete(id: number) {
         try {
             await deleteExercise(id)
             onDeleted()
