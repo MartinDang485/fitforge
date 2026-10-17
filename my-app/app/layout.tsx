@@ -30,7 +30,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <h2 className="text-3x1 font-bold text-blue-600 underline">Test Tailwind</h2>
         <Link href={"/about"}>About</Link>
-        <Link href={"/users"}>Users</Link>
         <Link href={"/workouts"}>Workouts</Link>
         {children}
       </body>

@@ -1,5 +1,4 @@
-import  ExerciseForm from "@/components/exerciseform"
-import ExerciseList from "@/components/exerciseList"
+
 import ExercisePanel from "@/components/exercisePanel"
 //To be function to get workouts instead of exercises
 async function getWorkouts() {
